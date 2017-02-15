@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>Server Sent Event</title>
+    <script type="text/javascript" src="/webjars/jquery/2.1.1/jquery.js"></script>
+    <script type="application/javascript">
+        if (!!window.EventSource) {
+            var source = new EventSource('push/wlf');
+
+            var s = '';
+
+            /*source.addEventListener('open', function(e) {
+             console.log("连接打开。");
+             }, false);
+
+             source.addEventListener('message', function(e) {
+             s += e.data + "<br/>";
+             $("#msg_from_server").html(s);
+             });
+
+             source.addEventListener('error', function(e) {
+             if (e.readyState = EventSource.CLOSED) {
+             console.log("连接关闭。");
+             } else {
+             console.log(e.readyState);
+             }
+             }, false);*/
+            source.onopen = function(e) {
+                console.log("连接打开。");
+
+                s += "连接打开。<br/>";
+                $("#msg_from_server").html(s);
+            };
+            source.onmessage = function(e) {
+                s += e.data + "<br/>";
+                $("#msg_from_server").html(s);
+                // source.close(); // 接受到消息后关闭连接
+            };
+            source.onerror = function(e) {
+                if (e.readyState = EventSource.CLOSED) {
+                    console.log("连接关闭。");
+
+                    s += "连接关闭。<br/>";
+                    $("#msg_from_server").html(s);
+                } else {
+                    console.log(e.readyState);
+                }
+            }
+        } else {
+            console.log("没有sse");
+        }
+    </script>
+</head>
+<body>
+<div id="msg_from_server"></div>
+</body>
+</html>
